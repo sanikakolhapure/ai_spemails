@@ -4,13 +4,12 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
 
 st.set_page_config(
-    page_title="Spam Email Detector",
+    page_title="AI Spam Email Detector",
     page_icon="📧"
 )
 
-st.title("📧 Spam Email Detection System")
+st.title("📧 AI Spam Email Detector")
 
-# Sample Dataset
 data = {
     "email": [
         "Congratulations! You won a free iPhone",
@@ -18,7 +17,9 @@ data = {
         "Meeting scheduled for tomorrow",
         "Project report attached",
         "Win money instantly click here",
-        "Let's discuss the assignment"
+        "Let's discuss the assignment",
+        "Urgent! Verify your bank account",
+        "Your invoice is attached",
     ],
     "label": [
         "spam",
@@ -26,28 +27,26 @@ data = {
         "ham",
         "ham",
         "spam",
-        "ham"
-    ]
+        "ham",
+        "spam",
+        "ham",
+    ],
 }
 
 df = pd.DataFrame(data)
 
-# Train Model
 vectorizer = CountVectorizer()
 X = vectorizer.fit_transform(df["email"])
-y = df["label"]
 
 model = MultinomialNB()
-model.fit(X, y)
+model.fit(X, df["label"])
 
-# User Input
 email_text = st.text_area(
-    "Enter Email Content",
-    placeholder="Paste email text here..."
+    "Paste Email Content",
+    height=200
 )
 
-if st.button("Check Email"):
-
+if st.button("Analyze Email"):
     if email_text.strip():
 
         email_vector = vectorizer.transform([email_text])
@@ -59,4 +58,4 @@ if st.button("Check Email"):
             st.success("✅ Legitimate Email")
 
     else:
-        st.warning("Please enter email text.")
+        st.warning("Please enter email content.")
